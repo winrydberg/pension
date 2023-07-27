@@ -32,7 +32,7 @@ class ReportsController extends Controller
             DB::raw("DATE_FORMAT(created_at,'%M %Y') as months")
             )->where('created_at','>=', $startdate)
             ->where('created_at', '<=',$enddate)
-            ->where('claim_state_id', 6)
+            ->where('claim_state_id', 10)
             ->where('company_id', $companyid)
             ->groupBy('months','scheme_id')
             ->get();
@@ -64,7 +64,7 @@ class ReportsController extends Controller
             DB::raw("DATE_FORMAT(created_at,'%M %Y') as months")
             )->where('created_at','>=', $startdate)
             ->where('created_at', '<=',$enddate)
-            ->where('claim_state_id', 6)
+            ->where('claim_state_id', 10)
             ->where('scheme_id', $schemeid)
             ->groupBy('months')
             ->get();

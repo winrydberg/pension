@@ -43,7 +43,7 @@ class CustomersImport implements WithMultipleSheets, WithEvents
         if($this->totalSheets > 1){
             return [
                 new CustomersFirstSheetImport($this->claimid),
-                new CustomersSecondSheetImport($this->claimid),
+                // new CustomersSecondSheetImport($this->claimid),
              ];
         }else{
             return [

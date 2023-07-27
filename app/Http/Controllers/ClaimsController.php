@@ -279,7 +279,7 @@ class ClaimsController extends Controller
 
     public function validateData(array $columns ){
            
-        $validated = ["NO", "POLICY NUMBER", "CLAIMANT", "TYPE OF CLAIM", "AMOUNT(GHC)", "DATE", "COMPANY"];
+        $validated = ["NO", "POLICY NUMBER", "CLAIMANT", "TYPE OF CLAIM", "AMOUNT", "DATE", "COMPANY"];
         $intersect = array_intersect($validated, $columns);
 
         if(count($validated) == count($intersect)){

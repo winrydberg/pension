@@ -57,7 +57,7 @@ class DashboardController extends Controller
         // })->get();
 
         $states = ClaimState::withCount(['claim' => function($query) {
-             $query->whereBetween('created_at',[Carbon::now()->subDays(1), Carbon::now()]);
+             $query->whereBetween('created_at',[Carbon::now()->subDays(10), Carbon::now()]);
         }])->get();
 
     

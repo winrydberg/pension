@@ -108,6 +108,9 @@
                                         <button onclick="transferedToBank({{$claim->id}})" class="btn btn-md btn-block btn-round btn-danger" style="margin-top: 5px; margin-bottom: 5px;"><em class="icon ni ni-menu"></em> <span>Transfered To Bank</span></button>
                                     @endif
                                 @endrole
+                                @role('system-admin')
+                                    <button onclick="deleteClaim({{$claim->id}})" class="btn btn-md btn-block btn-round btn-danger" style="margin-top: 5px; margin-bottom: 5px;"><em class="icon ni ni-trash"></em> <span>Delete Claim</span></button>
+                                @endrole
 
                                 
                             </div>
@@ -180,15 +183,15 @@
 
                                                 <td>
                                                     @if($hasIssue==false)
-                                                        <button onclick="showFileIssueModal('{{$file->id}}', '{{$filename}}')" class="btn btn-sm btn-round btn-warning"><i class="fa fa-info-circle"></i> Report Issue</button>
+                                                        <button onclick="showFileIssueModal('{{$file->id}}', '{{$filename}}')" {{$claim->claim_state_id >= 6 ?'disabled="disabled"': ''}} class="btn btn-sm btn-round btn-warning"><i class="fa fa-info-circle"></i> Report Issue</button>
                                                     @endif
                                                     
                                                     @if($hasIssue == true)
                                                         <a href="{{url('/issue-review?ticket='.$file->unresolved_issue()?->issue_ticket)}}" class="btn btn-sm btn-round btn-primary"><em class="icon ni ni-info"></em> <span>Resolve Issue</span></a>
                                                     @else
                                                     @endif
-                                                   
-                                                    <button onclick="deleteClaimFile('{{$file->id}}')" {{$claim->claim_state_id >= 2 ?'disabled="disabled"': ''}} class="btn btn-round btn-danger btn-sm"><i class="fa fa-trash"></i> Delete File</button>
+                                                    {{-- {{$claim->claim_state_id >= 2 ?'disabled="disabled"': ''}} --}}
+                                                    <button onclick="deleteClaimFile('{{$file->id}}')" {{$claim->claim_state_id >= 2 ?'disabled="disabled"': ''}}  class="btn btn-round btn-danger btn-sm"><i class="fa fa-trash"></i> Delete File</button>
                                                 </td>
                                             </tr>
                                       @endforeach
@@ -583,5 +586,46 @@ $('#fileIssueForm').submit(function(e) {
         }
     })
 })
+</script>
+<script>
+    function deleteClaim(id) {
+        Swal.fire({
+            title: "Delete Claim Now?",
+            text: "Are your sure? Action cannot be undone!!!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Delete",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{url('/delete-claim')}}",
+                    method: "POST",
+                    data: { id: id, _token: "{{Session::token()}}" },
+                    success: function (response) {
+                        if (response.status == "success") {
+                            Swal.fire(
+                                "Success",
+                                response.message,
+                                "success"
+                            ).then(() => {
+                                window.location.href="{{url('/dashboard')}}";
+                            });
+                        } else {
+                            Swal.fire("Error!!!", response.message, "error");
+                        }
+                    },
+                    error: function (error) {
+                        Swal.fire(
+                            "Error!!!",
+                            "Oops, unable to delete claim. please try again",
+                            "error"
+                        );
+                    },
+                });
+            }
+        });
+    }
 </script>
 @stop

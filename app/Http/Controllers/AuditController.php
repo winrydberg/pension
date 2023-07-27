@@ -55,15 +55,21 @@ class AuditController extends Controller
                         // if (!File::exists( $storageDestinationPath)) {
                         //     File::makeDirectory($storageDestinationPath, 0755, true);
                         // }
-                        Storage::putFileAs(
+                        $path = Storage::putFileAs(
                             $uploadPath,
                             $file,
                             $filename
                         );
+
+                        event(new ClaimFileUploaded([$path], Auth::user()->id, Auth::user()->department?->id, $claim->id, 1));
                     }      
-                    if($request->hasFile('claimfiles'))  {
-                        event(new ClaimFileUploaded($uploadedFiles, Auth::user()->id, Auth::user()->department?->id, $claim->id, 1));
-                    }
+                    // if($request->hasFile('claimfiles'))  {
+                    //     if(is_array($uploadedFiles)){
+                    //         foreach($uploadedFiles as $file){
+                    //             event(new ClaimFileUploaded([$file], Auth::user()->id, Auth::user()->department?->id, $claim->id, 1));
+                    //         }
+                    //     } 
+                    // }
                     
                     event(new NewClaimAudited($claim->id));
                     

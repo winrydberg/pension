@@ -123,7 +123,12 @@
                                       <span class="amount"> {{$unProcessedCount}} 
                                       </span>
                                   </div>
-                                  <a href="{{url('/un-processed-claims')}}" class="btn btn-dim btn-xs btn-round btn-outline-danger" ><em class="icon ni ni-link"></em> <span>View Claims</span></a>
+                                  @hasanyrole('system-admin|claim-entry|front-desk')
+                                        <a href="{{url('/un-processed-claims')}}" class="btn btn-dim btn-xs btn-round btn-outline-danger" ><em class="icon ni ni-link"></em> <span>View Claims</span></a>
+                                    @else
+                                        <a href="#" style="pointer-events: none !important; cursor: default;" class="btn btn-dim btn-xs btn-round btn-outline-danger" ><em class="icon ni ni-link"></em> <span>View Claims</span></a>
+                                    @endhasanyrole
+                                  
                               </div>
                           </div><!-- .card -->
                       </div><!-- .col -->
